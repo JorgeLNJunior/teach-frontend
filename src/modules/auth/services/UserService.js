@@ -12,5 +12,15 @@ export default {
     {
       headers: { 'Content-Type': 'application/json' }
     })
+  },
+
+  login (user) {
+    return http.post('/login', {
+      email: user.email,
+      password: user.password
+    },
+    {
+      headers: { 'Content-Type': 'application/json' }
+    })
   }
 }
