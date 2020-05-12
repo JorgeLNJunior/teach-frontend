@@ -19,7 +19,10 @@ export default {
   name: 'Register',
   components: {
     RegisterForm
-  }
+  },
+  data: () => ({
+
+  })
 
 }
 </script>
