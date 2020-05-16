@@ -22,5 +22,14 @@ export default {
     {
       headers: { 'Content-Type': 'application/json' }
     })
+  },
+
+  activateAccount (id, code) {
+    return http.get('/activate', {
+      params: {
+        id: id,
+        code: code
+      }
+    })
   }
 }

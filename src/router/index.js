@@ -13,6 +13,11 @@ const routes = [
     path: '/login',
     name: 'login',
     component: () => import(/* webpackChunkName: "login" */ '../modules/auth/views/Login')
+  },
+  {
+    path: '/activate',
+    name: 'ActivateAccount',
+    component: () => import(/* webpackChunkName: "activate" */'../modules/auth/views/AccountActivation')
   }
 ]
 
