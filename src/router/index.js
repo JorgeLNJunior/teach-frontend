@@ -5,7 +5,7 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/*',
+    path: '*',
     name: '404',
     component: () => import(/* webpackChunkName: "404" */ '../modules/error/views/404')
   },
