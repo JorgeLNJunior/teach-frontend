@@ -5,6 +5,11 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/*',
+    name: '404',
+    component: () => import(/* webpackChunkName: "404" */ '../modules/error/views/404')
+  },
+  {
     path: '/register',
     name: 'register',
     component: () => import(/* webpackChunkName: "register" */ '../modules/auth/views/Register')
