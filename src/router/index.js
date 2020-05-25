@@ -23,6 +23,11 @@ const routes = [
     path: '/activate',
     name: 'ActivateAccount',
     component: () => import(/* webpackChunkName: "activate" */'../modules/auth/views/AccountActivation')
+  },
+  {
+    path: '/',
+    name: 'Home',
+    component: () => import('../modules/home/views/Home')
   }
 ]
 

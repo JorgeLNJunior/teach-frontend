@@ -1,4 +1,5 @@
-import http from '../../../plugins/axios'
+import http from '../plugins/axios'
+import decode from 'jwt-decode'
 
 export default {
 
@@ -30,6 +31,14 @@ export default {
         id: id,
         code: code
       }
+    })
+  },
+
+  getByID () {
+    const token = localStorage.getItem('token')
+    const decodedToken = decode(token)
+    return http.get(`/users/${decodedToken.uid}`, {
+      headers: { Authorization: `Bearer ${token}` }
     })
   }
 }
