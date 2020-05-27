@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mt-n6 ml-n4">
+  <v-card class="mt-n6 ml-n4" elevation="6">
     <v-card-text>
       <p v-if="!follows" class="text-center subtitle-2">Você não segue nenhum usuário</p>
       <p v-else class="text-center subtitle-2">Usuários seguidos</p>

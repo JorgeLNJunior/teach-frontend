@@ -3,8 +3,11 @@
     <Toolbar :user="user"></Toolbar>
     <v-container fluid>
       <v-row align="start" justify="start">
-        <v-col cols="12" md="2">
+        <v-col cols="6" md="2">
           <LeftBar :follows="follows"></LeftBar>
+        </v-col>
+        <v-col md="6" cols="6" offset="1">
+          <PostForm></PostForm>
         </v-col>
       </v-row>
     </v-container>
@@ -16,6 +19,7 @@
 import UserService from '../../../services/UserService'
 import Toolbar from '../components/Toolbar'
 import LeftBar from '../components/LeftBar'
+import PostForm from '../components/PostForm'
 
 export default {
   data: () => ({
@@ -34,7 +38,6 @@ export default {
     getFollows () {
       UserService.getFollowedUsers()
         .then((response) => {
-          console.log(response.data)
           this.follows = response.data
         })
         .catch((error) => {
@@ -50,7 +53,8 @@ export default {
 
   components: {
     Toolbar,
-    LeftBar
+    LeftBar,
+    PostForm
   }
 
 }

@@ -1,6 +1,9 @@
 import http from '../plugins/axios'
 import decode from 'jwt-decode'
 
+const token = localStorage.getItem('token')
+const decodedToken = decode(token)
+
 export default {
 
   register (user) {
@@ -35,18 +38,21 @@ export default {
   },
 
   getByID () {
-    const token = localStorage.getItem('token')
-    const decodedToken = decode(token)
     return http.get(`/users/${decodedToken.uid}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
   },
 
   getFollowedUsers () {
-    const token = localStorage.getItem('token')
-    const decodedToken = decode(token)
     return http.get(`/users/${decodedToken.uid}/follows`, {
       headers: { Authorization: `Bearer ${token}` }
     })
+  },
+
+  createNewPost (post) {
+    return http.post('/posts', post, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
   }
+
 }
