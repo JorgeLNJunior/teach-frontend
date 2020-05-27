@@ -40,5 +40,13 @@ export default {
     return http.get(`/users/${decodedToken.uid}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
+  },
+
+  getFollowedUsers () {
+    const token = localStorage.getItem('token')
+    const decodedToken = decode(token)
+    return http.get(`/users/${decodedToken.uid}/follows`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
   }
 }

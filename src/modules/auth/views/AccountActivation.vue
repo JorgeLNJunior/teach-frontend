@@ -19,7 +19,7 @@
 
 <script>
 
-import UserService from '../services/UserService'
+import UserService from '@/services/UserService'
 
 export default {
   name: 'AccountActivation',
