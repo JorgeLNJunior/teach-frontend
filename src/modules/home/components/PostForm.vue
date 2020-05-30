@@ -1,5 +1,5 @@
 <template>
-  <v-card elevation="6">
+  <v-card elevation="6" class="mt-12">
     <v-snackbar v-model="snackbar" top :timeout="timeout">{{ responseMessage }}</v-snackbar>
     <v-card-title></v-card-title>
       <v-card-text>

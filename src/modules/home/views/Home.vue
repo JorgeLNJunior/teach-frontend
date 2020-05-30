@@ -1,6 +1,6 @@
 <template>
   <v-content>
-    <Toolbar :user="user"></Toolbar>
+    <Appbar :user="user"></Appbar>
     <v-container fluid>
       <v-row align="start" justify="start">
         <v-col cols="6" md="2">
@@ -17,7 +17,7 @@
 <script>
 
 import UserService from '../../../services/UserService'
-import Toolbar from '../components/Toolbar'
+import Appbar from '../components/AppBar'
 import LeftBar from '../components/LeftBar'
 import PostForm from '../components/PostForm'
 
@@ -52,7 +52,7 @@ export default {
   },
 
   components: {
-    Toolbar,
+    Appbar,
     LeftBar,
     PostForm
   }

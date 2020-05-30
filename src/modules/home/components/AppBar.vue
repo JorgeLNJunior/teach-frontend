@@ -1,6 +1,6 @@
 <template>
-  <v-toolbar fixed color="light blue">
-    <router-link to="/">
+  <v-app-bar color="light blue" fixed>
+        <router-link to="/">
       <v-toolbar-title class="headline">
         <v-img max-width="48px" src="@/assets/logo.png"></v-img>
       </v-toolbar-title>
@@ -38,12 +38,12 @@
         </v-list>
       </v-menu>
     </v-toolbar-items>
-  </v-toolbar>
+  </v-app-bar>
 </template>
 
 <script>
 export default {
-  name: 'Toolbar',
+  name: 'AppBar',
   props: {
     user: Object
   },
