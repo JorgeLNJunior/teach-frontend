@@ -8,6 +8,7 @@
         </v-col>
         <v-col md="6" cols="6" offset="1">
           <PostForm></PostForm>
+          <Post :user="user"></Post>
         </v-col>
       </v-row>
     </v-container>
@@ -20,6 +21,7 @@ import UserService from '../../../services/UserService'
 import Appbar from '../components/AppBar'
 import LeftBar from '../components/LeftBar'
 import PostForm from '../components/PostForm'
+import Post from '../components/Post'
 
 export default {
   data: () => ({
@@ -54,7 +56,8 @@ export default {
   components: {
     Appbar,
     LeftBar,
-    PostForm
+    PostForm,
+    Post
   }
 
 }
