@@ -17,7 +17,7 @@
     <v-card-actions>
       <v-row>
         <v-col cols="6">
-          <v-btn color="" class="ml-2" outlined block text large elevation="2">
+          <v-btn :color="likeColor" class="ml-2" outlined block text large elevation="2" :loading="likeButtonLoading" v-on:click="likePost()">
             <v-icon left>thumb_up</v-icon>
             {{ post.post.likes }}
           </v-btn>
@@ -42,13 +42,48 @@ import PostService from '@/services/PostService'
 
 export default {
   name: 'Post',
+  data: () => ({
+    likeColor: '',
+    likeButtonLoading: false,
+    liked: false
+  }),
   props: {
-    post: Object
+    post: Object,
+    userLikes: Array
   },
   methods: {
+    checkLike () {
+      for (var i of this.userLikes) {
+        if (i.post_id === this.post.post.id) {
+          this.likeColor = 'blue'
+          this.liked = true
+        }
+      }
+    },
+
+    likePost () {
+      this.likeButtonLoading = true
+      PostService.likePost(this.post.post.id)
+        .then((response) => {
+          console.log(response.data)
+          this.likeColor = 'blue'
+          this.liked = true
+          this.post.post.likes++
+        })
+        .catch((error) => {
+          console.log(error.response)
+        })
+        .finally(() => {
+          this.likeButtonLoading = false
+        })
+    },
+
     sendComment () {
       console.log('ok')
     }
+  },
+  mounted () {
+    this.checkLike()
   }
 }
 </script>

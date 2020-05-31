@@ -8,7 +8,7 @@
         </v-col>
         <v-col md="6" cols="6" offset="1">
           <PostForm></PostForm>
-          <Post v-for="post in posts" :key="post.id" :post="post"></Post>
+          <Post v-for="post in posts" :key="post.id" :post="post" :userLikes="userLikes"></Post>
         </v-col>
       </v-row>
     </v-container>
@@ -23,11 +23,14 @@ import LeftBar from '../components/LeftBar'
 import PostForm from '../components/PostForm'
 import Post from '../components/Post'
 
+import decode from 'jwt-decode'
+
 export default {
   data: () => ({
     user: {},
     follows: [],
-    posts: []
+    posts: [],
+    userLikes: []
   }),
 
   methods: {
@@ -55,6 +58,16 @@ export default {
         .catch((error) => {
           console.log(error.response)
         })
+    },
+    getLikes () {
+      const token = decode(localStorage.getItem('token'))
+      UserService.getUserLikes(token.uid)
+        .then((response) => {
+          this.userLikes = response.data
+        })
+        .catch((error) => {
+          console.log(error.response)
+        })
     }
   },
 
@@ -62,6 +75,7 @@ export default {
     this.getUser()
     this.getFollows()
     this.getPosts()
+    this.getLikes()
   },
 
   components: {

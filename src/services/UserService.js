@@ -53,6 +53,12 @@ export default {
     return http.get('/follows/posts', {
       headers: { Authorization: `Bearer ${token}` }
     })
+  },
+
+  getUserLikes (userId) {
+    return http.get(`/users/${userId}/likes`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
   }
 
 }
