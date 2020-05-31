@@ -16,5 +16,11 @@ export default {
     return http.post(`posts/${id}/likes`, {}, {
       headers: { Authorization: `Bearer ${token}` }
     })
+  },
+
+  removePostLike (id) {
+    return http.delete(`posts/${id}/likes`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
   }
 }

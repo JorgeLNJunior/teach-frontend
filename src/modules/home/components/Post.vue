@@ -17,7 +17,7 @@
     <v-card-actions>
       <v-row>
         <v-col cols="6">
-          <v-btn :color="likeColor" class="ml-2" outlined block text large elevation="2" :loading="likeButtonLoading" v-on:click="likePost()">
+          <v-btn :color="likeColor" class="ml-2" outlined block text large elevation="2" :loading="likeButtonLoading" v-on:click="likeButtonClick()">
             <v-icon left>thumb_up</v-icon>
             {{ post.post.likes }}
           </v-btn>
@@ -65,7 +65,6 @@ export default {
       this.likeButtonLoading = true
       PostService.likePost(this.post.post.id)
         .then((response) => {
-          console.log(response.data)
           this.likeColor = 'blue'
           this.liked = true
           this.post.post.likes++
@@ -76,6 +75,30 @@ export default {
         .finally(() => {
           this.likeButtonLoading = false
         })
+    },
+
+    removeLike () {
+      this.likeButtonLoading = true
+      PostService.removePostLike(this.post.post.id)
+        .then((response) => {
+          this.likeColor = ''
+          this.liked = false
+          this.post.post.likes--
+        })
+        .catch((error) => {
+          console.log(error.response)
+        })
+        .finally(() => {
+          this.likeButtonLoading = false
+        })
+    },
+
+    likeButtonClick () {
+      if (this.liked) {
+        this.removeLike()
+      } else {
+        this.likePost()
+      }
     },
 
     sendComment () {
