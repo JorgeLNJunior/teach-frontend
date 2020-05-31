@@ -8,7 +8,7 @@
         </v-col>
         <v-col md="6" cols="6" offset="1">
           <PostForm></PostForm>
-          <Post :user="user"></Post>
+          <Post v-for="post in posts" :key="post.id" :post="post"></Post>
         </v-col>
       </v-row>
     </v-container>
@@ -26,7 +26,8 @@ import Post from '../components/Post'
 export default {
   data: () => ({
     user: {},
-    follows: []
+    follows: [],
+    posts: []
   }),
 
   methods: {
@@ -45,12 +46,22 @@ export default {
         .catch((error) => {
           console.log(error.response)
         })
+    },
+    getPosts () {
+      UserService.getFollowedUsersPosts()
+        .then((response) => {
+          this.posts = response.data
+        })
+        .catch((error) => {
+          console.log(error.response)
+        })
     }
   },
 
   mounted () {
     this.getUser()
     this.getFollows()
+    this.getPosts()
   },
 
   components: {

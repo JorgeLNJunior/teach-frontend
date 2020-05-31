@@ -21,7 +21,7 @@
 
 <script>
 
-import UserService from '@/services/UserService'
+import PostService from '@/services/PostService'
 
 export default {
   name: 'PostForm',
@@ -43,7 +43,7 @@ export default {
     },
     sendPost () {
       this.postButtonLoading = true
-      UserService.createNewPost(this.newPost)
+      PostService.createNewPost(this.newPost)
         .then((response) => {
           this.responseMessage = 'Postagem criada com sucesso'
           this.snackbar = true

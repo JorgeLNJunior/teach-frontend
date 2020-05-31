@@ -49,8 +49,8 @@ export default {
     })
   },
 
-  createNewPost (post) {
-    return http.post('/posts', post, {
+  getFollowedUsersPosts () {
+    return http.get('/follows/posts', {
       headers: { Authorization: `Bearer ${token}` }
     })
   }
