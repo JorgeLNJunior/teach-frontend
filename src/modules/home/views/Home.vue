@@ -44,7 +44,7 @@ export default {
     getFollows () {
       UserService.getFollowedUsers()
         .then((response) => {
-          this.follows = response.data
+          this.follows = response.data.reverse()
         })
         .catch((error) => {
           console.log(error.response)
