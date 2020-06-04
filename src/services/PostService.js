@@ -22,5 +22,15 @@ export default {
     return http.delete(`posts/${id}/likes`, {
       headers: { Authorization: `Bearer ${token}` }
     })
+  },
+
+  insertComment (postId, comment) {
+    return http.post(`/posts/${postId}/comments`,
+      {
+        content: comment
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` }
+      })
   }
 }

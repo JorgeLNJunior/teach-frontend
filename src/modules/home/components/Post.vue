@@ -17,7 +17,10 @@
     <v-card-actions>
       <v-row>
         <v-col cols="6">
-          <v-btn :color="likeColor" class="ml-2" outlined block text large elevation="2" :loading="likeButtonLoading" v-on:click="likeButtonClick()">
+          <v-btn :color="likeColor" class="ml-2" outlined block text large
+            elevation="2" :loading="likeButtonLoading"
+            v-on:click="likeButtonClick()"
+          >
             <v-icon left>thumb_up</v-icon>
             {{ post.post.likes }}
           </v-btn>
@@ -29,7 +32,12 @@
           </v-btn>
         </v-col>
         <v-col>
-          <v-text-field label="Insira um comentário" prepend-inner-icon="insert_comment" @click:append="sendComment()" append-icon="send" solo rounded class="ml-3 mr-3"></v-text-field>
+          <v-text-field label="Insira um comentário" prepend-inner-icon="insert_comment"
+            @click:append="sendComment()" append-icon="send" solo rounded
+            class="ml-3 mr-3" v-model="newComment" :loading="commentLoading"
+            :messages="commentSucessMessage" counter="200"
+            :error-messages="commentErrorMessage">
+          </v-text-field>
         </v-col>
       </v-row>
     </v-card-actions>
@@ -45,7 +53,11 @@ export default {
   data: () => ({
     likeColor: '',
     likeButtonLoading: false,
-    liked: false
+    liked: false,
+    newComment: '',
+    commentLoading: false,
+    commentSucessMessage: '',
+    commentErrorMessage: ''
   }),
   props: {
     post: Object,
@@ -61,7 +73,7 @@ export default {
       }
     },
 
-    likePost () {
+    addLike () {
       this.likeButtonLoading = true
       PostService.likePost(this.post.post.id)
         .then((response) => {
@@ -97,12 +109,29 @@ export default {
       if (this.liked) {
         this.removeLike()
       } else {
-        this.likePost()
+        this.addLike()
       }
     },
 
     sendComment () {
-      console.log('ok')
+      this.commentLoading = 'light blue'
+      PostService.insertComment(this.post.post.id, this.newComment)
+        .then((response) => {
+          console.log(response.data)
+          this.newComment = ''
+          this.commentSucessMessage = 'Comentário criado com sucesso'
+          var self = this
+          setTimeout(() => { self.commentSucessMessage = '' }, 5000)
+        })
+        .catch((error) => {
+          console.log(error.response)
+          this.commentErrorMessage = 'Desculpe, ocorreu um erro'
+          var self = this
+          setTimeout(() => { self.commentErrorMessage = '' }, 5000)
+        })
+        .finally(() => {
+          this.commentLoading = false
+        })
     }
   },
   mounted () {
