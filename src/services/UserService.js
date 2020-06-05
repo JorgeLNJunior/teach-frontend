@@ -43,6 +43,12 @@ export default {
     })
   },
 
+  getByUsername (username) {
+    return http.get(`/users/?username=${username}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+  },
+
   getFollowedUsers () {
     return http.get(`/users/${decodedToken.uid}/follows`, {
       headers: { Authorization: `Bearer ${token}` }
