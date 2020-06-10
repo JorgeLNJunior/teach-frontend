@@ -93,19 +93,18 @@ export default {
     },
 
     getByUsername () {
-      if (this.searchUsername !== '') {
-        this.searchEnded = false
-        UserService.getByUsername(this.searchUsername)
-          .then((response) => {
-            this.searchResult = response.data
-          })
-          .catch((error) => {
-            console.log(error.response.data)
-          })
-          .finally(() => {
-            this.searchEnded = true
-          })
-      }
+      this.searchResult = []
+      this.searchEnded = false
+      UserService.getByUsername(this.searchUsername)
+        .then((response) => {
+          this.searchResult = response.data
+        })
+        .catch((error) => {
+          console.log(error.response.data)
+        })
+        .finally(() => {
+          this.searchEnded = true
+        })
     }
 
   }
