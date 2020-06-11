@@ -8,7 +8,12 @@
         </v-col>
         <v-col md="6" cols="6" offset="1">
           <PostForm></PostForm>
-          <Post v-for="post in posts" :key="post.id" :post="post" :userLikes="userLikes"></Post>
+          <v-card v-if="posts.length <= 0" flat>
+            <v-card-text class="mt-10">
+              <p class="text-center headline">Nada por aqui...</p>
+            </v-card-text>
+          </v-card>
+          <Post v-else v-for="post in posts" :key="post.id" :post="post" :userLikes="userLikes"></Post>
         </v-col>
       </v-row>
     </v-container>
@@ -35,11 +40,15 @@ export default {
 
   methods: {
     getUser () {
-      UserService.getByID().then((response) => {
-        this.user = response.data
-      }).catch((error) => {
-        console.log(error.response)
-      })
+      const token = localStorage.getItem('token')
+      const decodedToken = decode(token)
+      const uid = decodedToken.uid
+      UserService.getByID(uid)
+        .then((response) => {
+          this.user = response.data
+        }).catch((error) => {
+          console.log(error.response)
+        })
     },
     getFollows () {
       UserService.getFollowedUsers()

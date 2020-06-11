@@ -34,10 +34,9 @@ export default {
     })
   },
 
-  getByID () {
+  getByID (uid) {
     const token = localStorage.getItem('token')
-    const decodedToken = decode(token)
-    return http.get(`/users/${decodedToken.uid}`, {
+    return http.get(`/users/${uid}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
   },
@@ -67,6 +66,13 @@ export default {
   getUserLikes (userId) {
     const token = localStorage.getItem('token')
     return http.get(`/users/${userId}/likes`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+  },
+
+  followUserByID (id) {
+    const token = localStorage.getItem('token')
+    return http.post(`/users/follows/${id}`, {}, {
       headers: { Authorization: `Bearer ${token}` }
     })
   }
