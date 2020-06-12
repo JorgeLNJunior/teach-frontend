@@ -30,7 +30,13 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('../modules/home/views/Home'),
+    component: () => import(/* webpackChunkName: "home" */'../modules/home/views/Home'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/user/:uid',
+    name: 'User',
+    component: () => import(/* webpackChunkName: "user" */'../modules/user/views/User'),
     meta: { requiresAuth: true }
   }
 ]

@@ -56,6 +56,13 @@ export default {
     })
   },
 
+  getUserPosts (uid) {
+    const token = localStorage.getItem('token')
+    return http.get(`/users/${uid}/posts`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+  },
+
   getFollowedUsersPosts () {
     const token = localStorage.getItem('token')
     return http.get('/follows/posts', {
@@ -73,6 +80,13 @@ export default {
   followUserByID (id) {
     const token = localStorage.getItem('token')
     return http.post(`/users/follows/${id}`, {}, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+  },
+
+  unfollowUser (id) {
+    const token = localStorage.getItem('token')
+    return http.delete(`/users/follows/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
   }
