@@ -11,23 +11,36 @@
             <v-icon large v-on="on">more_horiz</v-icon>
         </template>
         <v-list>
-          <v-list-item>
+          <v-list-item @click="dialogToEditPost = true">
             <v-icon class="mr-2">create</v-icon>
             <v-list-item-title>Editar</v-list-item-title>
           </v-list-item>
-          <v-list-item @click="dialogToDelete = true">
+          <v-list-item @click="dialogToDeletePost = true">
             <v-icon class="mr-2">delete</v-icon>
             <v-list-item-title>Excluir</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
-      <v-dialog v-model="dialogToDelete" max-width="300">
+      <v-dialog v-model="dialogToDeletePost" max-width="300" persistent>
         <v-card>
           <v-card-title>Excluir?</v-card-title>
           <v-card-text class="text-center mt-2">Deseja excluir esta postagem?</v-card-text>
           <v-card-actions class="justify-end">
-            <v-btn @click="dialogToDelete = false">Cancelar</v-btn>
+            <v-btn @click="dialogToDeletePost = false">Cancelar</v-btn>
             <v-btn color="light red" :loading="deleteButtonLoading" @click="deletePost()">Excluir</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="dialogToEditPost" max-width="1200" persistent>
+        <v-card>
+          <v-card-title>Editar</v-card-title>
+          <v-card-text>
+            <v-text-field solo v-model="postEdit.title"></v-text-field>
+            <v-textarea solo v-model="postEdit.content"></v-textarea>
+          </v-card-text>
+          <v-card-actions class="justify-end">
+            <v-btn color="light red" @click="dialogToEditPost = false">Cancelar</v-btn>
+            <v-btn color="light blue" :loading="editButtonLoading" @click="editPost()">Editar</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -82,12 +95,18 @@ export default {
     likeColor: '',
     likeButtonLoading: false,
     deleteButtonLoading: false,
+    editButtonLoading: false,
     liked: false,
     newComment: '',
     commentLoading: false,
     commentSucessMessage: '',
     commentErrorMessage: '',
-    dialogToDelete: false
+    dialogToDeletePost: false,
+    dialogToEditPost: false,
+    postEdit: {
+      title: '',
+      content: ''
+    }
   }),
   props: {
     post: Object,
@@ -180,12 +199,35 @@ export default {
         })
         .finally(() => {
           this.deleteButtonLoading = true
-          this.dialogToDelete = false
+          this.dialogToDeletePost = false
+        })
+    },
+
+    editPost () {
+      this.editButtonLoading = true
+      PostService.editPost(this.post.id, this.postEdit)
+        .then((response) => {
+          this.$router.go(0)
+        })
+        .catch((error) => {
+          this.postEdit = {
+            title: this.post.title,
+            content: this.post.content
+          }
+          console.log(error)
+        })
+        .finally(() => {
+          this.editButtonLoading = false
+          this.dialogToEditPost = false
         })
     }
   },
   mounted () {
     this.checkLike()
+    this.postEdit = {
+      title: this.post.title,
+      content: this.post.content
+    }
   }
 }
 </script>

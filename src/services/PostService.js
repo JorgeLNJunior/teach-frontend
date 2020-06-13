@@ -16,6 +16,13 @@ export default {
     })
   },
 
+  editPost (id, post) {
+    const token = localStorage.getItem('token')
+    return http.put(`/posts/${id}`, post, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+  },
+
   likePost (id) {
     const token = localStorage.getItem('token')
     return http.post(`posts/${id}/likes`, {}, {
