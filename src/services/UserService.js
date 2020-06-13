@@ -89,6 +89,15 @@ export default {
     return http.delete(`/users/follows/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
-  }
+  },
 
+  editUser (data, avatar) {
+    const token = localStorage.getItem('token')
+    const decodedToken = decode(token)
+    const uid = decodedToken.uid
+    if (avatar) {}
+    return http.put(`/users/${uid}`, data, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+  }
 }

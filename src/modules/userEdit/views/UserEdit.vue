@@ -12,6 +12,7 @@
                 <img :src="user.avatar">
               </v-avatar>
               <p class="headline">{{ user.username }}</p>
+              <v-btn @click="editUserDialog = true">Editar</v-btn>
              </v-card-text>
             <v-card-actions>
             </v-card-actions>
@@ -21,6 +22,23 @@
           <p class="text-center headline mt-10" v-if="userPosts.length <= 0">Nada por aqui...</p>
           <Post v-else v-for="post in userPosts.slice(0,15)" :key="post.id" :post="post"
            :user="user" :userLikes="userLikes"></Post>
+          <v-dialog v-model="editUserDialog" max-width="900">
+            <v-card>
+              <v-card-title>
+                <v-avatar class="mr-2">
+                  <img :src="user.avatar">
+                </v-avatar>
+                Editar perfil
+              </v-card-title>
+              <v-card-text>
+                <v-text-field v-model="userEdit.username" solo placeholder="Nome"></v-text-field>
+              </v-card-text>
+              <v-card-actions class="justify-center">
+                <v-btn color="light red mr-1" @click="editUserDialog = false">Cancelar</v-btn>
+                <v-btn color="light blue ml-1" @click="editUser()" :loading="editUserButtonLoading">Editar</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </v-col>
       </v-row>
     </v-container>
@@ -41,7 +59,12 @@ export default {
     user: {},
     userPosts: [],
     userLikes: [],
-    buttonLoading: false
+    buttonLoading: false,
+    editUserButtonLoading: false,
+    editUserDialog: false,
+    userEdit: {
+      username: ''
+    }
   }),
   components: {
     AppBar,
@@ -71,6 +94,9 @@ export default {
       UserService.getByID(uid)
         .then((response) => {
           this.user = response.data
+          this.userEdit = {
+            username: this.user.username
+          }
         })
         .catch((error) => {
           console.log(error)
@@ -91,6 +117,24 @@ export default {
         })
         .catch((error) => {
           console.log(error)
+        })
+    },
+
+    editUser () {
+      this.editUserButtonLoading = true
+      UserService.editUser(this.userEdit)
+        .then((response) => {
+          this.$router.go(0)
+        })
+        .catch((error) => {
+          this.userEdit = {
+            username: this.user.username
+          }
+          console.log(error)
+        })
+        .finally(() => {
+          this.editUserButtonLoading = false
+          this.editUserDialog = false
         })
     }
 
