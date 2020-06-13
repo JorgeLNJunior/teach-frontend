@@ -6,6 +6,7 @@
       </v-avatar>
       <span class="ml-2">{{ post.owner_user.username }}</span>
     </v-card-title>
+     <v-card-subtitle class="subtitle-2 text-center">{{ formatDate(post.post.created_at) }}</v-card-subtitle>
     <v-divider></v-divider>
     <v-card-text class="text-center">
       <span class="title">{{ post.post.title }}</span>
@@ -47,6 +48,7 @@
 <script>
 
 import PostService from '@/services/PostService'
+import moment from 'moment'
 
 export default {
   name: 'Post',
@@ -71,6 +73,10 @@ export default {
           this.liked = true
         }
       }
+    },
+
+    formatDate (date) {
+      return moment(date).locale('pt-br').format('LLL')
     },
 
     addLike () {
