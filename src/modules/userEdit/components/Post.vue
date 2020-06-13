@@ -2,17 +2,43 @@
   <v-card class="mt-10" elevation="6">
     <v-card-title>
       <v-avatar>
-        <img :src="post.owner_user.avatar">
+        <img :src="user.avatar">
       </v-avatar>
-      <span class="ml-2">{{ post.owner_user.username }}</span>
+      <span class="ml-2">{{ user.username }}</span>
+      <v-spacer></v-spacer>
+      <v-menu offset-y auto>
+        <template v-slot:activator="{on}">
+            <v-icon large v-on="on">more_horiz</v-icon>
+        </template>
+        <v-list>
+          <v-list-item>
+            <v-icon class="mr-2">create</v-icon>
+            <v-list-item-title>Editar</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="dialogToDelete = true">
+            <v-icon class="mr-2">delete</v-icon>
+            <v-list-item-title>Excluir</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <v-dialog v-model="dialogToDelete" max-width="300">
+        <v-card>
+          <v-card-title>Excluir?</v-card-title>
+          <v-card-text class="text-center mt-2">Deseja excluir esta postagem?</v-card-text>
+          <v-card-actions class="justify-end">
+            <v-btn @click="dialogToDelete = false">Cancelar</v-btn>
+            <v-btn color="light red" :loading="deleteButtonLoading" @click="deletePost()">Excluir</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-card-title>
-     <v-card-subtitle class="subtitle-2 text-center">{{ formatDate(post.post.created_at) }}</v-card-subtitle>
+    <v-card-subtitle class="subtitle-2 text-center">{{ formatDate(post.created_at) }}</v-card-subtitle>
     <v-divider></v-divider>
     <v-card-text class="text-center">
-      <span class="title">{{ post.post.title }}</span>
+      <span class="title">{{ post.title }}</span>
     </v-card-text>
     <v-card-text>
-      <p class="body-1 ml-4 mr-4 text-justify">{{ post.post.content }}</p>
+      <p class="body-1 ml-4 mr-4 text-justify">{{ post.content }}</p>
     </v-card-text>
     <v-divider></v-divider>
     <v-card-actions>
@@ -23,7 +49,7 @@
             v-on:click="likeButtonClick()"
           >
             <v-icon left>thumb_up</v-icon>
-            {{ post.post.likes }}
+            {{ post.likes }}
           </v-btn>
         </v-col>
         <v-col cols="6">
@@ -47,7 +73,7 @@
 
 <script>
 
-import PostService from '@/services/PostService'
+import PostService from '../../../services/PostService'
 import moment from 'moment'
 
 export default {
@@ -55,20 +81,23 @@ export default {
   data: () => ({
     likeColor: '',
     likeButtonLoading: false,
+    deleteButtonLoading: false,
     liked: false,
     newComment: '',
     commentLoading: false,
     commentSucessMessage: '',
-    commentErrorMessage: ''
+    commentErrorMessage: '',
+    dialogToDelete: false
   }),
   props: {
     post: Object,
+    user: Object,
     userLikes: Array
   },
   methods: {
     checkLike () {
       for (var i of this.userLikes) {
-        if (i.post_id === this.post.post.id) {
+        if (i.post_id === this.post.id) {
           this.likeColor = 'blue'
           this.liked = true
         }
@@ -81,11 +110,11 @@ export default {
 
     addLike () {
       this.likeButtonLoading = true
-      PostService.likePost(this.post.post.id)
+      PostService.likePost(this.post.id)
         .then((response) => {
           this.likeColor = 'blue'
           this.liked = true
-          this.post.post.likes++
+          this.post.likes++
         })
         .catch((error) => {
           console.log(error.response)
@@ -97,11 +126,11 @@ export default {
 
     removeLike () {
       this.likeButtonLoading = true
-      PostService.removePostLike(this.post.post.id)
+      PostService.removePostLike(this.post.id)
         .then((response) => {
           this.likeColor = ''
           this.liked = false
-          this.post.post.likes--
+          this.post.likes--
         })
         .catch((error) => {
           console.log(error.response)
@@ -121,7 +150,7 @@ export default {
 
     sendComment () {
       this.commentLoading = 'light blue'
-      PostService.insertComment(this.post.post.id, this.newComment)
+      PostService.insertComment(this.post.id, this.newComment)
         .then((response) => {
           console.log(response.data)
           this.newComment = ''
@@ -137,6 +166,21 @@ export default {
         })
         .finally(() => {
           this.commentLoading = false
+        })
+    },
+
+    deletePost () {
+      this.deleteButtonLoading = true
+      PostService.deletePost(this.post.id)
+        .then((response) => {
+          this.$router.go(0)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+        .finally(() => {
+          this.deleteButtonLoading = true
+          this.dialogToDelete = false
         })
     }
   },

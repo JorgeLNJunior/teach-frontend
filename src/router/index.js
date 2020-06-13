@@ -38,6 +38,12 @@ const routes = [
     name: 'User',
     component: () => import(/* webpackChunkName: "user" */'../modules/user/views/User'),
     meta: { requiresAuth: true }
+  },
+  {
+    path: '/edit/:uid',
+    name: 'EditUser',
+    component: () => import(/* webpackChunkName: "userEdit" */'../modules/userEdit/views/UserEdit'),
+    meta: { requiresAuth: true }
   }
 ]
 
