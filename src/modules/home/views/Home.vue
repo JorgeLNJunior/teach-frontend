@@ -13,7 +13,7 @@
               <p class="text-center headline">Nada por aqui...</p>
             </v-card-text>
           </v-card>
-          <Post v-else v-for="post in posts" :key="post.id" :post="post" :userLikes="userLikes"></Post>
+          <Post v-else v-for="post in posts.slice(0,30)" :key="post.id" :post="post" :userLikes="userLikes"></Post>
         </v-col>
       </v-row>
     </v-container>
