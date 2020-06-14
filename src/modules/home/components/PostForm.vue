@@ -45,6 +45,7 @@ export default {
       this.postButtonLoading = true
       PostService.createNewPost(this.newPost)
         .then((response) => {
+          this.clearPostForm()
           this.responseMessage = 'Postagem criada com sucesso'
           this.snackbar = true
         })
