@@ -12,7 +12,10 @@
                 <img :src="user.avatar">
               </v-avatar>
               <p class="headline">{{ user.username }}</p>
-              <v-btn @click="editUserDialog = true">Editar</v-btn>
+              <v-btn @click="editUserDialog = true">
+                Editar
+                <v-icon right>create</v-icon>
+              </v-btn>
              </v-card-text>
             <v-card-actions>
             </v-card-actions>
@@ -31,7 +34,9 @@
                 Editar perfil
               </v-card-title>
               <v-card-text>
-                <v-text-field v-model="userEdit.username" solo placeholder="Nome"></v-text-field>
+                <v-text-field v-model="userEdit.username" solo placeholder="Nome" prepend-icon="account_circle"></v-text-field>
+                <v-file-input solo placeholder="Avatar" accept=".jpg, .jpeg, .png" counter show-size
+                 v-model="avatarEdit" prepend-icon="insert_photo" :rules="avatarRules"></v-file-input>
               </v-card-text>
               <v-card-actions class="justify-center">
                 <v-btn color="light red mr-1" @click="editUserDialog = false">Cancelar</v-btn>
@@ -64,7 +69,9 @@ export default {
     editUserDialog: false,
     userEdit: {
       username: ''
-    }
+    },
+    avatarEdit: null,
+    avatarRules: [value => !value || value.size < 2000000 || 'O tamanho da imagem deve ser menor que 2MB']
   }),
   components: {
     AppBar,
@@ -82,7 +89,7 @@ export default {
       const uid = decodedToken.uid
       // eslint-disable-next-line
       if (this.$route.params.uid != uid) {
-        this.$router.push(`/edit/${uid}`)
+        this.$router.push(`/user/${this.$route.params.uid}`)
       }
     },
 
@@ -122,22 +129,17 @@ export default {
 
     editUser () {
       this.editUserButtonLoading = true
-      UserService.editUser(this.userEdit)
+      UserService.editUser(this.editUser, this.avatarEdit)
         .then((response) => {
+          console.log(response)
+          this.editUserButtonLoading = false
           this.$router.go(0)
         })
         .catch((error) => {
-          this.userEdit = {
-            username: this.user.username
-          }
           console.log(error)
-        })
-        .finally(() => {
           this.editUserButtonLoading = false
-          this.editUserDialog = false
         })
     }
-
   },
   beforeMount () {
     this.checkURLParams()

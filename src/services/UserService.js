@@ -1,5 +1,6 @@
 import http from '../plugins/axios'
 import decode from 'jwt-decode'
+import axios from 'axios'
 
 export default {
 
@@ -95,9 +96,23 @@ export default {
     const token = localStorage.getItem('token')
     const decodedToken = decode(token)
     const uid = decodedToken.uid
-    if (avatar) {}
-    return http.put(`/users/${uid}`, data, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
+
+    if (avatar) {
+      const formData = new FormData()
+      formData.append('avatar', avatar)
+
+      return axios.all([
+        http.post('/users/avatar', formData, {
+          headers: { Authorization: `Bearer ${token}` }
+        }),
+        http.put(`/users/${uid}`, data, {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+      ])
+    } else {
+      return http.put(`/users/${uid}`, data, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+    }
   }
 }
