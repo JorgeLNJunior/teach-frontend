@@ -7,7 +7,7 @@
     <v-divider></v-divider>
     <v-card-actions>
       <v-list-item-group>
-        <v-list-item v-for="follow of follows.slice(0,7)" :key="follow.id">
+        <v-list-item v-for="follow of follows.slice(0,7)" :key="follow.id" :to="getUserRoute(follow.followed_user.id)">
           <v-list-item-avatar>
             <img :src="follow.followed_user.avatar">
           </v-list-item-avatar>
@@ -23,6 +23,11 @@ export default {
   name: 'LeftBar',
   props: {
     follows: Array
+  },
+  methods: {
+    getUserRoute (id) {
+      return `/user/${id}`
+    }
   }
 }
 </script>
