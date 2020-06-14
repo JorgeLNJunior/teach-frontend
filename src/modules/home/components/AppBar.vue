@@ -42,7 +42,7 @@
         </v-avatar>
       </template>
         <v-list>
-          <v-list-item>
+          <v-list-item :to="getUserEditRoute()">
             <v-icon class="mr-2">account_circle</v-icon>
             <v-list-item-title>Perfil</v-list-item-title>
           </v-list-item>
@@ -71,6 +71,7 @@
 <script>
 
 import UserService from '@/services/UserService'
+import decode from 'jwt-decode'
 
 export default {
   name: 'AppBar',
@@ -105,6 +106,13 @@ export default {
         .finally(() => {
           this.searchEnded = true
         })
+    },
+
+    getUserEditRoute () {
+      const token = localStorage.getItem('token')
+      const decodedToken = decode(token)
+      const uid = decodedToken.uid
+      return `/edit/${uid}`
     }
 
   }
