@@ -26,7 +26,7 @@
             v-if="searchResult.length <= 0 & searchEnded == true">
             <v-list-item-title>Nenhum usuário encontrado</v-list-item-title>
           </v-list-item>
-          <v-list-item v-else v-for="result in searchResult" :key="result.id">
+          <v-list-item v-else v-for="result in searchResult" :key="result.id" :to="getSelectedUserRoute(result.id)">
             <v-avatar class="mr-2">
               <img :src="result.avatar">
             </v-avatar>
@@ -113,8 +113,20 @@ export default {
       const decodedToken = decode(token)
       const uid = decodedToken.uid
       return `/edit/${uid}`
+    },
+
+    getSelectedUserRoute (id) {
+      return `/user/${id}`
     }
 
+  },
+
+  watch: {
+    $route (to, from) {
+      if (to !== from) {
+        location.reload()
+      }
+    }
   }
 
 }
